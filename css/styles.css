@@ -1,0 +1,204 @@
+:root {
+  --ink: #1c1915;
+  --muted: #5c564c;
+  --paper: #f6f1e7;
+  --card: #fffdf8;
+  --line: #d7cfc0;
+  --accent: #6b3f2a;
+  --accent-2: #2f4a3c;
+  --ok: #215c38;
+  --ok-bg: #e5f4ea;
+  --bad: #8a1f1f;
+  --bad-bg: #f8e6e4;
+  --mid: #7a5b12;
+  --mid-bg: #f7efd4;
+  --shadow: 0 1px 2px rgba(40, 30, 16, 0.06), 0 8px 24px rgba(40, 30, 16, 0.06);
+}
+
+* { box-sizing: border-box; }
+
+html, body {
+  margin: 0;
+  padding: 0;
+  background: var(--paper);
+  color: var(--ink);
+  font-family: "Source Sans 3", "Segoe UI", sans-serif;
+  line-height: 1.45;
+}
+
+.app-header, .toolbar, .status-line, .parse-warnings, .quiz {
+  width: min(1100px, calc(100% - 2rem));
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.app-header {
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+  align-items: flex-end;
+  padding: 1.4rem 0 0.8rem;
+}
+
+.brand h1 {
+  margin: 0;
+  font-size: 1.65rem;
+  letter-spacing: 0.02em;
+}
+
+.brand p {
+  margin: 0.15rem 0 0;
+  color: var(--muted);
+}
+
+.stats {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.55rem;
+}
+
+.stats span {
+  background: var(--card);
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  padding: 0.2rem 0.7rem;
+  font-size: 0.92rem;
+}
+
+.stats .ok { color: var(--ok); }
+.stats .bad { color: var(--bad); }
+.stats .mid { color: var(--mid); }
+
+.toolbar {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.6rem 0.75rem;
+  align-items: flex-end;
+  padding: 0.8rem 0 0.4rem;
+}
+
+.field {
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
+  font-size: 0.8rem;
+  color: var(--muted);
+}
+
+select, .btn {
+  font: inherit;
+  border-radius: 8px;
+  border: 1px solid var(--line);
+  background: var(--card);
+  color: var(--ink);
+  padding: 0.42rem 0.7rem;
+}
+
+.btn { cursor: pointer; }
+.btn:hover:not(:disabled) { border-color: var(--accent); }
+.btn:disabled { opacity: 0.45; cursor: not-allowed; }
+.btn-primary {
+  background: var(--accent);
+  border-color: var(--accent);
+  color: #fff;
+}
+
+.pager {
+  display: flex;
+  align-items: center;
+  gap: 0.45rem;
+}
+
+.status-line {
+  color: var(--muted);
+  margin: 0.4rem auto 0.6rem;
+}
+
+.parse-warnings {
+  background: var(--mid-bg);
+  border: 1px solid #e2d09a;
+  padding: 0.7rem 0.9rem;
+  white-space: pre-wrap;
+  font-size: 0.86rem;
+}
+
+.quiz { padding-bottom: 3rem; }
+
+.question {
+  background: var(--card);
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  box-shadow: var(--shadow);
+  padding: 1rem 1.1rem 0.95rem;
+  margin: 0.85rem 0;
+}
+
+.question.is-correct { border-color: #9dccad; }
+.question.is-incorrect { border-color: #e3b1ab; }
+.question.is-partial { border-color: #e0c984; }
+
+.q-meta {
+  display: flex;
+  justify-content: space-between;
+  gap: 0.8rem;
+  color: var(--muted);
+  font-size: 0.82rem;
+  margin-bottom: 0.35rem;
+}
+
+.q-title { font-weight: 700; color: var(--accent); }
+.q-stem {
+  font-family: "Gentium Plus", "Times New Roman", serif;
+  font-size: 1.22rem;
+  margin: 0.2rem 0 0.75rem;
+}
+
+.choices { display: flex; flex-direction: column; gap: 0.4rem; }
+.choice {
+  display: flex;
+  gap: 0.55rem;
+  align-items: flex-start;
+  padding: 0.45rem 0.55rem;
+  border-radius: 8px;
+  border: 1px solid transparent;
+}
+
+.choice span, .q-stem, .feedback {
+  font-family: "Gentium Plus", "Times New Roman", serif;
+}
+
+.choice input { margin-top: 0.35rem; }
+.choice.picked { background: #f3eee4; }
+.choice.mark-correct { background: var(--ok-bg); border-color: #b7d8c2; }
+.choice.mark-wrong { background: var(--bad-bg); border-color: #ecc0bb; }
+
+.sa-row {
+  display: flex;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+}
+
+.sa-row input[type="text"] {
+  flex: 1 1 16rem;
+  font-family: "Gentium Plus", serif;
+  font-size: 1.1rem;
+  padding: 0.45rem 0.6rem;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: #fff;
+}
+
+.q-actions { margin-top: 0.75rem; }
+
+.feedback {
+  margin-top: 0.7rem;
+  padding: 0.65rem 0.75rem;
+  border-radius: 8px;
+  background: #f3eee4;
+}
+
+.feedback.ok { background: var(--ok-bg); }
+.feedback.bad { background: var(--bad-bg); }
+.feedback.mid { background: var(--mid-bg); }
+
+.verdict { font-family: "Source Sans 3", sans-serif; font-weight: 700; margin-bottom: 0.25rem; }
