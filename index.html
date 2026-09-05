@@ -24,7 +24,7 @@
     </div>
   </header>
 
-  <section class="toolbar">
+    <section class="toolbar">
     <label class="field">
       <span>Gifts folder</span>
       <select id="gift-select">
@@ -52,11 +52,24 @@
       <button type="button" id="btn-next" class="btn" disabled>Next</button>
     </div>
 
+    <label class="field">
+      <span>Jump to</span>
+      <input id="jump-to" type="text" placeholder="12 or Q012" autocomplete="off" />
+    </label>
+    <button type="button" id="btn-jump" class="btn" disabled>Go</button>
+
+    <label class="toggle">
+      <input type="checkbox" id="show-answers" />
+      Show correct answers
+    </label>
+
     <button type="button" id="btn-reload" class="btn" disabled>Reload quiz</button>
     <button type="button" id="btn-export" class="btn" disabled>Shuffle &amp; export</button>
   </section>
 
   <p class="status-line" id="status-line">Load a <code>.gift</code> file to begin. For the folder menu, serve this project over HTTP.</p>
+  <div class="parse-warnings" id="parse-warnings" hidden></div>
+  <div class="category-banner" id="category-banner" hidden></div>
   <pre class="parse-warnings" id="parse-warnings" hidden></pre>
 
   <main id="quiz" class="quiz"></main>

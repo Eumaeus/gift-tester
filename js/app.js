@@ -5,7 +5,8 @@
     warnings: [],
     pageSize: 10,
     page: 0,
-    results: {}
+    results: {},
+    showAnswers: false
   };
 
   const els = {
@@ -17,10 +18,14 @@
     prev: document.getElementById("btn-prev"),
     next: document.getElementById("btn-next"),
     pageLabel: document.getElementById("page-label"),
+    jumpTo: document.getElementById("jump-to"),
+    jump: document.getElementById("btn-jump"),
+    showAnswers: document.getElementById("show-answers"),
     reload: document.getElementById("btn-reload"),
     exp: document.getElementById("btn-export"),
     status: document.getElementById("status-line"),
     warnings: document.getElementById("parse-warnings"),
+    banner: document.getElementById("category-banner"),
     quiz: document.getElementById("quiz"),
     stats: document.getElementById("stats")
   };
@@ -75,6 +80,15 @@
     return state.questions.slice(start, start + state.pageSize);
   }
 
+  function categorySummary() {
+    const map = new Map();
+    for (const q of state.questions) {
+      const key = q.category || "(no $CATEGORY)";
+      map.set(key, (map.get(key) || 0) + 1);
+    }
+    return [...map.entries()];
+  }
+
   function updateStats() {
     let answered = 0, correct = 0, incorrect = 0, partial = 0;
     for (const q of state.questions) {
@@ -100,21 +114,54 @@
     els.next.disabled = state.page >= pages - 1;
     els.reload.disabled = !state.source;
     els.exp.disabled = !state.questions.length;
+    els.jump.disabled = !state.questions.length;
+  }
+
+  function renderWarnings() {
+    if (!state.warnings.length) {
+      els.warnings.hidden = true;
+      els.warnings.innerHTML = "";
+      return;
+    }
+    const items = state.warnings.map((w) => {
+      const snippet = w.snippet
+        ? `<span class="snippet">${Gift.escapeHtml(w.snippet)}</span>`
+        : "";
+      return `<li><span class="line-no">Line ${w.line}</span> — ${Gift.escapeHtml(w.message)}${snippet}</li>`;
+    }).join("");
+    els.warnings.hidden = false;
+    els.warnings.innerHTML = `<h2>${state.warnings.length} parse issue${state.warnings.length === 1 ? "" : "s"}</h2><ol>${items}</ol>`;
+  }
+
+  function renderBanner() {
+    if (!state.questions.length) {
+      els.banner.hidden = true;
+      els.banner.innerHTML = "";
+      return;
+    }
+    const cats = categorySummary();
+    els.banner.hidden = false;
+    els.banner.innerHTML = `
+      <div class="label">Moodle categor${cats.length === 1 ? "y" : "ies"}</div>
+      <div class="category-list">
+        ${cats.map(([name, n]) =>
+          `<span class="category-chip">${Gift.escapeHtml(name)} · ${n}</span>`
+        ).join("")}
+      </div>
+    `;
   }
 
   function gradeQuestion(q) {
     const card = document.getElementById(q.id);
     if (q.type === "sa") {
       const given = card.querySelector("input[type='text']").value;
-      const ok = Gift.answersMatch(q.answers.filter((a) => a.weight > 0), given);
       const hit = q.answers.find((a) => Gift.answersMatch([a], given) && a.weight > 0);
       return {
-        grade: ok ? (hit ? hit.weight : 100) : 0,
+        grade: hit ? hit.weight : 0,
         feedback: hit ? hit.feedback : "",
         selected: given
       };
     }
-
     const inputs = [...card.querySelectorAll("input[name='ans-" + q.id + "']")];
     const selected = inputs.filter((i) => i.checked).map((i) => Number(i.value));
     let grade = selected.reduce((sum, idx) => sum + (q.answers[idx]?.weight || 0), 0);
@@ -134,6 +181,7 @@
 
   function renderFeedback(q, result) {
     const card = document.getElementById(q.id);
+    if (!card) return;
     const box = card.querySelector(".feedback");
     const labels = {
       correct: "Correct",
@@ -159,15 +207,30 @@
     }
   }
 
-  function render() {
-    els.quiz.innerHTML = "";
-    if (state.warnings.length) {
-      els.warnings.hidden = false;
-      els.warnings.textContent = state.warnings.join("\n");
+  function applyReveal(card, q) {
+    if (!state.showAnswers) return;
+    if (q.type === "mc") {
+      card.querySelectorAll(".choice").forEach((row, idx) => {
+        const a = q.answers[idx];
+        const tag = document.createElement("span");
+        tag.className = "weight-tag";
+        tag.textContent = a.weight > 0 ? `✓ ${a.weight}%` : `${a.weight}%`;
+        row.appendChild(tag);
+        if (a.weight > 0) row.classList.add("is-key");
+      });
     } else {
-      els.warnings.hidden = true;
-      els.warnings.textContent = "";
+      const accepted = q.answers.filter((a) => a.weight > 0).map((a) => a.text).join(" · ");
+      const hint = document.createElement("div");
+      hint.className = "sa-accepted";
+      hint.textContent = "Accepted: " + accepted;
+      card.querySelector(".body").appendChild(hint);
     }
+  }
+
+  function render(focusId) {
+    els.quiz.innerHTML = "";
+    renderWarnings();
+    renderBanner();
 
     const startNum = state.pageSize === Infinity ? 1 : state.page * state.pageSize + 1;
     visibleQuestions().forEach((q, i) => {
@@ -178,10 +241,14 @@
       const typeLabel = q.type === "sa"
         ? "short answer"
         : q.multiSelect ? "multiple choice (select all that apply)" : "multiple choice";
+      const cat = q.category
+        ? `<div class="q-category">${Gift.escapeHtml(q.category)}</div>`
+        : "";
       card.innerHTML = `
+        ${cat}
         <div class="q-meta">
-          <span class="q-title">${q.title}</span>
-          <span>${typeLabel}${q.category ? " · " + q.category : ""} · #${num}</span>
+          <span class="q-title">${Gift.escapeHtml(q.title)}</span>
+          <span>${typeLabel} · #${num} · line ${q.line}</span>
         </div>
         <div class="q-stem">${Gift.renderMarkdown(q.stem)}</div>
         <div class="body"></div>
@@ -203,6 +270,7 @@
         });
         body.appendChild(choices);
       }
+      applyReveal(card, q);
       els.quiz.appendChild(card);
 
       const saved = state.results[q.id];
@@ -216,6 +284,38 @@
       }
     });
     updateStats();
+
+    if (focusId) {
+      const el = document.getElementById(focusId);
+      if (el) {
+        el.classList.add("flash");
+        el.scrollIntoView({ behavior: "smooth", block: "start" });
+      }
+    }
+  }
+
+  function findQuestion(query) {
+    const raw = String(query || "").trim();
+    if (!raw) return null;
+    const asNum = Number(raw.replace(/^#/, ""));
+    if (Number.isInteger(asNum) && asNum >= 1 && asNum <= state.questions.length) {
+      return state.questions[asNum - 1];
+    }
+    const needle = raw.replace(/^::|::$/g, "").toLowerCase();
+    return state.questions.find((q) => q.title.toLowerCase() === needle) ||
+      state.questions.find((q) => q.title.toLowerCase().includes(needle));
+  }
+
+  function jumpTo(query) {
+    const q = findQuestion(query);
+    if (!q) {
+      setStatus(`No question matches “${Gift.escapeHtml(query)}”. Try a number (1–${state.questions.length}) or a title such as Q012.`);
+      return;
+    }
+    if (state.pageSize !== Infinity) {
+      state.page = Math.floor((q.index - 1) / state.pageSize);
+    }
+    render(q.id);
   }
 
   function loadParsed(text, source) {
@@ -225,7 +325,8 @@
     state.warnings = parsed.warnings;
     state.results = {};
     state.page = Math.min(state.page, pageCount() - 1);
-    setStatus(`Loaded <strong>${source.name}</strong> · ${parsed.questions.length} questions · Adaptive mode (no penalties)`);
+    const warn = parsed.warnings.length ? ` · ${parsed.warnings.length} parse issue${parsed.warnings.length === 1 ? "" : "s"}` : "";
+    setStatus(`Loaded <strong>${Gift.escapeHtml(source.name)}</strong> · ${parsed.questions.length} questions · Adaptive mode (no penalties)${warn}`);
     render();
   }
 
@@ -240,6 +341,7 @@
     if (!state.source) return;
     const keepPage = state.page;
     const keepSize = state.pageSize;
+    const keepShow = state.showAnswers;
     try {
       if (state.source.file) {
         loadParsed(await state.source.file.text(), state.source);
@@ -250,6 +352,8 @@
       }
       state.page = keepPage;
       state.pageSize = keepSize;
+      state.showAnswers = keepShow;
+      els.showAnswers.checked = keepShow;
       render();
     } catch (err) {
       setStatus(`Reload failed: ${err.message}`);
@@ -306,6 +410,17 @@
   });
   els.prev.addEventListener("click", () => { state.page -= 1; render(); window.scrollTo(0, 0); });
   els.next.addEventListener("click", () => { state.page += 1; render(); window.scrollTo(0, 0); });
+  els.jump.addEventListener("click", () => jumpTo(els.jumpTo.value));
+  els.jumpTo.addEventListener("keydown", (ev) => {
+    if (ev.key === "Enter") {
+      ev.preventDefault();
+      jumpTo(els.jumpTo.value);
+    }
+  });
+  els.showAnswers.addEventListener("change", () => {
+    state.showAnswers = els.showAnswers.checked;
+    render();
+  });
   els.reload.addEventListener("click", reloadQuiz);
   els.exp.addEventListener("click", exportShuffled);
 

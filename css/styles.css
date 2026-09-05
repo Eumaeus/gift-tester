@@ -202,3 +202,128 @@ select, .btn {
 .feedback.mid { background: var(--mid-bg); }
 
 .verdict { font-family: "Source Sans 3", sans-serif; font-weight: 700; margin-bottom: 0.25rem; }
+
+.app-header, .toolbar, .status-line, .parse-warnings, .category-banner, .quiz {
+  width: min(1100px, calc(100% - 2rem));
+  margin-left: auto;
+  margin-right: auto;
+}
+
+#jump-to {
+  font: inherit;
+  width: 8.5rem;
+  border-radius: 8px;
+  border: 1px solid var(--line);
+  background: var(--card);
+  padding: 0.42rem 0.7rem;
+}
+
+.toggle {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  font-size: 0.92rem;
+  padding: 0.35rem 0.2rem;
+  user-select: none;
+}
+
+.parse-warnings {
+  background: var(--mid-bg);
+  border: 1px solid #e2d09a;
+  padding: 0.7rem 0.9rem;
+  font-size: 0.9rem;
+  border-radius: 10px;
+  margin: 0.4rem auto 0.7rem;
+}
+
+.parse-warnings h2 {
+  margin: 0 0 0.4rem;
+  font-size: 0.95rem;
+}
+
+.parse-warnings ol {
+  margin: 0;
+  padding-left: 1.3rem;
+}
+
+.parse-warnings li { margin: 0.2rem 0; }
+.parse-warnings .line-no {
+  font-variant-numeric: tabular-nums;
+  font-weight: 700;
+  color: var(--mid);
+}
+.parse-warnings .snippet {
+  display: block;
+  color: var(--muted);
+  font-family: ui-monospace, Menlo, monospace;
+  font-size: 0.8rem;
+  margin-top: 0.1rem;
+}
+
+.category-banner {
+  background: #efe4d2;
+  border: 1px solid #d3c3a8;
+  border-radius: 12px;
+  padding: 0.75rem 1rem;
+  margin: 0 auto 0.8rem;
+}
+
+.category-banner .label {
+  font-size: 0.75rem;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--muted);
+  margin: 0 0 0.25rem;
+}
+
+.category-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.45rem;
+}
+
+.category-chip {
+  background: var(--card);
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  padding: 0.2rem 0.7rem;
+  font-weight: 600;
+}
+
+.q-category {
+  display: inline-block;
+  background: #efe4d2;
+  border: 1px solid #d3c3a8;
+  color: var(--accent);
+  font-weight: 700;
+  font-size: 0.86rem;
+  border-radius: 999px;
+  padding: 0.12rem 0.65rem;
+  margin: 0 0 0.45rem;
+}
+
+.weight-tag {
+  font-family: "Source Sans 3", sans-serif;
+  font-size: 0.75rem;
+  font-weight: 700;
+  margin-left: 0.4rem;
+  color: var(--muted);
+  white-space: nowrap;
+}
+
+.choice.is-key .weight-tag { color: var(--ok); }
+.choice.is-key { outline: 1px dashed #9dccad; }
+.sa-accepted {
+  margin-top: 0.4rem;
+  font-size: 0.92rem;
+  color: var(--ok);
+}
+
+.question.flash {
+  animation: flash 1.1s ease;
+}
+
+@keyframes flash {
+  from { box-shadow: 0 0 0 3px #c9a36a; }
+  to { box-shadow: var(--shadow); }
+}
