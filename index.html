@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Gift-Tester</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Gentium+Plus:ital,wght@0,400;0,700;1,400;1,700&family=Source+Sans+3:ital,wght@0,400;0,600;0,700;1,400&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="css/styles.css" />
+</head>
+<body>
+  <header class="app-header">
+    <div class="brand">
+      <h1>Gift-Tester</h1>
+      <p>Preview Moodle GIFT quizzes before upload</p>
+    </div>
+    <div class="stats" id="stats">
+      <span data-stat="total">0 questions</span>
+      <span data-stat="answered">0 answered</span>
+      <span data-stat="correct" class="ok">0 correct</span>
+      <span data-stat="incorrect" class="bad">0 incorrect</span>
+      <span data-stat="partial" class="mid">0 partial</span>
+    </div>
+  </header>
+
+  <section class="toolbar">
+    <label class="field">
+      <span>Gifts folder</span>
+      <select id="gift-select">
+        <option value="">— none found —</option>
+      </select>
+    </label>
+
+    <button type="button" id="btn-load-listed" class="btn">Open selected</button>
+    <button type="button" id="btn-load-file" class="btn btn-primary">Load GIFT</button>
+    <input id="file-input" type="file" accept=".gift,text/plain" hidden />
+
+    <label class="field">
+      <span>Per page</span>
+      <select id="page-size">
+        <option value="5">5</option>
+        <option value="10" selected>10</option>
+        <option value="20">20</option>
+        <option value="all">All</option>
+      </select>
+    </label>
+
+    <div class="pager">
+      <button type="button" id="btn-prev" class="btn" disabled>Prev</button>
+      <span id="page-label">No quiz loaded</span>
+      <button type="button" id="btn-next" class="btn" disabled>Next</button>
+    </div>
+
+    <button type="button" id="btn-reload" class="btn" disabled>Reload quiz</button>
+    <button type="button" id="btn-export" class="btn" disabled>Shuffle &amp; export</button>
+  </section>
+
+  <p class="status-line" id="status-line">Load a <code>.gift</code> file to begin. For the folder menu, serve this project over HTTP.</p>
+  <pre class="parse-warnings" id="parse-warnings" hidden></pre>
+
+  <main id="quiz" class="quiz"></main>
+
+  <script src="js/gift-parser.js"></script>
+  <script src="js/app.js"></script>
+</body>
+</html>
