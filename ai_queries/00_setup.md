@@ -52,4 +52,8 @@ I like to keep HTML, JS, and CSS code in separate files.
 
 I have started a GitHub repository for this work: <https://github.com/Eumaeus/gift-tester>.
 
+Is this a project you can help me with?
+
+
+
 In it is a directory `ai_queries` where I will keep a record of our conversation.
