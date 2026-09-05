@@ -65,3 +65,21 @@ Wow! This is terrific! I will create and populate these files, test it, and get 
 ---
 
 Conversation at <https://x.com/i/grok/share/5f8a9d1204024b63a9d3351695e10e2e>
+
+Okay, that works perfectly! Love it!
+
+I've added a number of real quizzes, and everything works very well. Shuffle and Export is great!
+
+Everything is checked in and up-to-date.
+
+I like all of your suggested next steps:
+
+- Preserve $CATEGORY blocks more faithfully on export
+- Also, display prominently the defined category… this would be helpful before I put them in Moodle.
+- Jump-to-question box
+- Highlight parse failures with line numbers: EXCELLENT!
+- Optional “show correct answers” debug toggle for editing
+
+Thank you!
+
+
