@@ -1,3 +1,14 @@
 {
-  "files": ["sample-mc.gift", "sample-sa.gift"]
+  "files": [
+    "sample-mc.gift",
+    "sample-sa.gift",
+    "morph_drill_hq_ch1.1.gift",
+    "morph_drill_hq_ch1.2.gift",
+    "morph_drill_hq_ch1.3.gift",
+    "Odyssey01.gift",
+    "Odyssey02.gift",
+    "vocab_drill_ch1.1.gift",
+    "vocab_drill_ch1.2.gift"
+    "vocab_drill_ch1.3.gift",
+  ]
 }
