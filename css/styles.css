@@ -1,4 +1,6 @@
 :root {
+
+/*
   --ink: #1c1915;
   --muted: #5c564c;
   --paper: #f6f1e7;
@@ -13,9 +15,90 @@
   --mid: #7a5b12;
   --mid-bg: #f7efd4;
   --shadow: 0 1px 2px rgba(40, 30, 16, 0.06), 0 8px 24px rgba(40, 30, 16, 0.06);
+*/
+  --ink: #15151c;
+  --muted: #4c585c;
+  --paper: #e7eff6;
+  --card: #f8feff;
+  --line: #c0d3d7;
+  --accent: #2a496b;
+  --accent-2: #442f4a;
+  --ok: #215c38;
+  --ok-bg: #e5f4ea;
+  --bad: #8a1f1f;
+  --bad-bg: #f8e6e4;
+  --mid: #12547a;
+  --mid-bg: #b0b7d4;
+  --shadow: 0 1px 2px rgba(16, 28, 40, 0.06), 0 8px 24px rgba(16, 22, 40, 0.06);
+  
 }
 
 * { box-sizing: border-box; }
+
+
+
+footer {
+  box-sizing: content-box;
+  position: fixed;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin:0;
+  padding:0;
+  width:100vw;
+  left:0; right:0; bottom:0;
+  background: #582c83;
+  background: radial-gradient(circle, rgba(88,44,131,1) 35%, rgba(32,21,71,1) 100%);
+  height:60px;
+  border-top: 3px solid #ac58ff;
+  color: white;
+}
+
+footer > p, img {
+  display: inline-block;
+  margin: 0 35px;
+
+}
+
+footer a {
+  color: white;
+}
+
+footer > img {
+  position: relative;
+  bottom: -1px;
+}
+
+img.github_logo {
+  display: inline-block;
+  position: relative;
+  bottom: -3px;
+
+}
+
+img#fu_logo_img {
+  height:  45px;
+  position: absolute;
+  bottom:  -13px;
+  left:  -30px;
+}
+
+span#fu_motto {
+  position:  absolute;
+  bottom:  -10px;
+  left:  40px;
+}
+
+p#fu_logo, span#furman_motto {
+  font-family: Helvetica, sans;
+  font-weight: 200;
+  font-size: 12pt;
+  color: white;
+  z-index:  100;
+  display: inline-block;
+  position: fixed;
+  bottom: 5px;  
+}
 
 html, body {
   margin: 0;
@@ -26,7 +109,11 @@ html, body {
   line-height: 1.45;
 }
 
-.app-header, .toolbar, .status-line, .parse-warnings, .quiz {
+.smallprint {
+  font-size: 80%;
+}
+
+.app-header, .toolbar, .status-line, .parse-warnings, .quiz, footer {
   width: min(1100px, calc(100% - 2rem));
   margin-left: auto;
   margin-right: auto;
@@ -116,7 +203,7 @@ select, .btn {
 
 .parse-warnings {
   background: var(--mid-bg);
-  border: 1px solid #e2d09a;
+  border: 1px solid #e29ad4;
   padding: 0.7rem 0.9rem;
   white-space: pre-wrap;
   font-size: 0.86rem;
@@ -168,7 +255,7 @@ select, .btn {
 }
 
 .choice input { margin-top: 0.35rem; }
-.choice.picked { background: #f3eee4; }
+.choice.picked { background: #e4f0f3; }
 .choice.mark-correct { background: var(--ok-bg); border-color: #b7d8c2; }
 .choice.mark-wrong { background: var(--bad-bg); border-color: #ecc0bb; }
 
@@ -194,7 +281,7 @@ select, .btn {
   margin-top: 0.7rem;
   padding: 0.65rem 0.75rem;
   border-radius: 8px;
-  background: #f3eee4;
+  background: #e4edf3;
 }
 
 .feedback.ok { background: var(--ok-bg); }
@@ -229,7 +316,7 @@ select, .btn {
 
 .parse-warnings {
   background: var(--mid-bg);
-  border: 1px solid #e2d09a;
+  border: 1px solid #e29aa1;
   padding: 0.7rem 0.9rem;
   font-size: 0.9rem;
   border-radius: 10px;
@@ -261,8 +348,8 @@ select, .btn {
 }
 
 .category-banner {
-  background: #efe4d2;
-  border: 1px solid #d3c3a8;
+  background: #d2e0ef;
+  border: 1px solid #a8c5d3;
   border-radius: 12px;
   padding: 0.75rem 1rem;
   margin: 0 auto 0.8rem;
@@ -292,8 +379,8 @@ select, .btn {
 
 .q-category {
   display: inline-block;
-  background: #efe4d2;
-  border: 1px solid #d3c3a8;
+  background: #d2e0ef;
+  border: 1px solid #a8bbd3;
   color: var(--accent);
   font-weight: 700;
   font-size: 0.86rem;
@@ -324,6 +411,6 @@ select, .btn {
 }
 
 @keyframes flash {
-  from { box-shadow: 0 0 0 3px #c9a36a; }
+  from { box-shadow: 0 0 0 3px #6a6ac9; }
   to { box-shadow: var(--shadow); }
 }
