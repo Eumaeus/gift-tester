@@ -244,21 +244,30 @@
       const cat = q.category
         ? `<div class="q-category">${Gift.escapeHtml(q.category)}</div>`
         : "";
+
+      const stemHtml = q.embedded
+        ? (q.type === "sa"
+            ? `${Gift.renderMarkdown(q.stem)}<span class="sa-inline"><input type="text" autocomplete="off" spellcheck="false" placeholder="" /></span>${Gift.renderMarkdown(q.stemAfter)}`
+            : `${Gift.renderMarkdown(q.stem)}<span class="mw-blank">________</span>${Gift.renderMarkdown(q.stemAfter)}`)
+          : Gift.renderMarkdown(q.stem);
+
       card.innerHTML = `
         ${cat}
         <div class="q-meta">
           <span class="q-title">${Gift.escapeHtml(q.title)}</span>
           <span>${typeLabel} · #${num} · line ${q.line}</span>
         </div>
-        <div class="q-stem">${Gift.renderMarkdown(q.stem)}</div>
+        <div class="q-stem">${stemHtml}</div>
         <div class="body"></div>
         <div class="q-actions"><button type="button" class="btn btn-primary btn-check">Check</button></div>
         <div class="feedback" hidden></div>
       `;
       const body = card.querySelector(".body");
-      if (q.type === "sa") {
+    if (q.type === "sa") {
+      if (!q.embedded) {
         body.innerHTML = `<div class="sa-row"><input type="text" autocomplete="off" spellcheck="false" placeholder="Type an answer" /></div>`;
-      } else {
+      }
+    } else {
         const choices = document.createElement("div");
         choices.className = "choices";
         q.answers.forEach((a, idx) => {

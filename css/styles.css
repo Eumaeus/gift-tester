@@ -35,11 +35,35 @@
 
 * { box-sizing: border-box; }
 
+.sa-inline {
+  display: inline-block;
+  vertical-align: baseline;
+  margin: 0 0.15em;
+}
 
+.sa-inline input[type="text"] {
+  width: 11rem;
+  max-width: 40vw;
+  font-family: "Gentium Plus", serif;
+  font-size: 1.05rem;
+  padding: 0.12rem 0.4rem;
+  border: none;
+  border-bottom: 2px solid var(--ink);
+  border-radius: 0;
+  background: transparent;
+}
+
+.mw-blank {
+  display: inline-block;
+  min-width: 6rem;
+  margin: 0 0.2em;
+  border-bottom: 2px solid var(--ink);
+  color: transparent;
+}
 
 footer {
   box-sizing: content-box;
-  position: fixed;
+  /* position: fixed; */
   display: flex;
   align-items: center;
   justify-content: space-between;

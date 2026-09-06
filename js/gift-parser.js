@@ -176,9 +176,12 @@
         continue;
       }
 
-      const leftover = extracted.after.replace(/^\s+/, "");
-      if (leftover && !leftover.startsWith("//")) {
-        note(lineNo, "Extra text after closing `}` was ignored", leftover);
+            const leftover = extracted.after.replace(/[ \t]*\/\/[^\n]*/g, "");
+      const stemAfter = unescapeGift(leftover).replace(/\s+$/, "");
+      // Embedded / missing-word text after `}` is part of the stem.
+      // Do not warn unless it looks like another question started on the same line.
+      if (/^\s*(\$CATEGORY:|::)/m.test(stemAfter)) {
+        note(lineNo, "Extra text after closing `}` looks like another question and was ignored", leftover);
       }
 
       const header = extracted.before.trim();
@@ -216,7 +219,9 @@
         line: lineNo,
         title: head[1].trim(),
         format: (head[2] || "moodle").toLowerCase(),
-        stem: unescapeGift(head[3] || "").trim(),
+        stem: unescapeGift(head[3] || "").replace(/^\s+/, "").replace(/\s+$/, " "),
+        stemAfter: /^\s*(\$CATEGORY:|::)/m.test(stemAfter) ? "" : stemAfter,
+        embedded: !!(stemAfter && !/^\s*(\$CATEGORY:|::)/m.test(stemAfter)),
         category,
         ...parsed
       });
@@ -244,13 +249,16 @@
         lastCat = cat;
       }
       const fmt = q.format && q.format !== "moodle" ? `[${q.format}]` : "";
+      const after = q.stemAfter || "";
       lines.push(`::${q.title}::${fmt}${q.stem}{`);
       for (const a of q.answers) {
         const mark = q.type === "sa" ? "=" : "~";
-        lines.push(`\t${mark}%${a.weight}%${escapeGift(a.text)}${a.feedback ? "#" + a.feedback : ""}`);
+        const prefix = a.weight === 100 && q.type === "sa" ? "=" : `${mark}%${a.weight}%`;
+        const markOut = q.type === "sa" ? "=" : "~";
+        lines.push(`\t${markOut}%${a.weight}%${escapeGift(a.text)}${a.feedback ? "#" + a.feedback : ""}`);
       }
       if (q.generalFeedback) lines.push(`####${q.generalFeedback}`);
-      lines.push("}");
+      lines.push(`}${after}`);
       lines.push("");
     }
     return lines.join("\n");

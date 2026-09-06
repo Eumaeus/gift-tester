@@ -16,3 +16,11 @@ My hand-written `.gift` short-answer, fill-in-the-blank questions often have the
 ~~~
 
 Moodle is fine with these, displays them correctly and works correctly. But the current app throws a syntax-error about text after the {…} being ignored. Could we update the app to allow these "embedded answers"?
+
+Everything is up-to-date in the GitHub repository.
+
+---
+
+Conversation at <https://x.com/i/grok/share/6ecb864657f540f6ad29ed56eef36009>
+
+Thanks! Could you give me a little more guidance on where to insert that code for `js/app.js`?
