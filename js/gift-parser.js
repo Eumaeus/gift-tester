@@ -15,12 +15,75 @@
       .replace(/"/g, "&quot;");
   }
 
+  const ALLOWED_HTML_ATTRS = {
+    br: [],
+    hr: [],
+    span: ["class", "style", "lang", "dir", "title"],
+    div: ["class", "style", "lang", "dir", "title"],
+    p: ["class", "style", "lang", "dir"],
+    em: ["class", "style"],
+    strong: ["class", "style"],
+    b: ["class", "style"],
+    i: ["class", "style"],
+    u: ["class", "style"],
+    s: ["class", "style"],
+    sub: ["class", "style"],
+    sup: ["class", "style"],
+    small: ["class", "style"],
+    mark: ["class", "style"],
+    abbr: ["class", "title"],
+    blockquote: ["class"],
+    code: ["class"],
+    pre: ["class"],
+    ul: ["class"],
+    ol: ["class", "start"],
+    li: ["class"],
+    table: ["class", "style"],
+    thead: ["class"],
+    tbody: ["class"],
+    tr: ["class"],
+    th: ["class", "colspan", "rowspan"],
+    td: ["class", "colspan", "rowspan"],
+    a: ["href", "title", "class", "target", "rel"],
+    img: ["src", "alt", "title", "class", "width", "height", "style"]
+  };
+
+  function sanitizeTag(tag) {
+    const parsed = String(tag).match(/^<\/?([a-zA-Z][a-zA-Z0-9]*)\b([^>]*)\/?>$/);
+    if (!parsed) return "";
+    const name = parsed[1].toLowerCase();
+    const allowed = ALLOWED_HTML_ATTRS[name];
+    if (!allowed) return "";
+    if (tag.startsWith("</")) return `</${name}>`;
+    if (name === "br" || name === "hr") return `<${name}>`;
+
+    const attrs = [];
+    const attrRe = /([a-zA-Z:_][a-zA-Z0-9:_.-]*)\s*=\s*("([^"]*)"|'([^']*)'|([^\s>]+))/g;
+    const rawAttrs = parsed[2] || "";
+    let m;
+    while ((m = attrRe.exec(rawAttrs))) {
+      const attr = m[1].toLowerCase();
+      if (!allowed.includes(attr) || attr.startsWith("on")) continue;
+      const value = m[3] != null ? m[3] : m[4] != null ? m[4] : m[5];
+      if ((attr === "href" || attr === "src") && /^\s*javascript:/i.test(value)) continue;
+      attrs.push(`${attr}="${escapeHtml(value)}"`);
+    }
+    return `<${name}${attrs.length ? " " + attrs.join(" ") : ""}>`;
+  }
+
   function renderMarkdown(src) {
-    let s = escapeHtml(src || "");
+    const placeholders = [];
+    let s = String(src || "").replace(/<\/?[a-zA-Z][a-zA-Z0-9]*\b[^>]*>/g, (tag) => {
+      const i = placeholders.length;
+      placeholders.push(sanitizeTag(tag));
+      return `\u0000H${i}\u0000`;
+    });
+    s = escapeHtml(s);
     s = s.replace(/\*\*([\s\S]+?)\*\*/g, "<strong>$1</strong>");
     s = s.replace(/(^|[^*])\*([^*\n]+)\*/g, "$1<em>$2</em>");
     s = s.replace(/`([^`]+)`/g, "<code>$1</code>");
     s = s.replace(/\n/g, "<br>");
+    s = s.replace(/\u0000H(\d+)\u0000/g, (_, n) => placeholders[Number(n)]);
     return s;
   }
 
