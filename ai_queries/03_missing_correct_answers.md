@@ -36,3 +36,10 @@ Select the correct Latin-alphabet transliteration of the following Greek charact
 Across this quiz, the pattern seems to be that if the correct answer is first, among the distractors, it displays. If it is not first, it is swallowed, *and* the correct-answer-entry appears in the feedback for the distractor that is above it in the list.
 
 Can you take a look and see what is going wrong? Thanks!
+
+
+---
+
+Conversation at: <https://x.com/i/grok/share/8d146ffade2e4f849d3d2a46823379c8>
+
+Thanks! That fixed it perfectly. This is terrific help, and I am grateful.

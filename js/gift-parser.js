@@ -118,9 +118,10 @@
       block = block.slice(0, gf.index).trim();
     }
 
-    const hasTilde = /(^|\s)~/.test(block);
+    const hasTilde = /(^|\s)(?<!\\)~/.test(block);
     const type = hasTilde ? "mc" : "sa";
-    const splitter = hasTilde ? /(?=~)/ : /(?==)/;
+    const splitter = hasTilde ? /(?=(?<!\\)[~=])/ : /(?=(?<!\\)=)/;
+    
     const parts = block.split(splitter).map((p) => p.trim()).filter(Boolean);
     const answers = [];
 
