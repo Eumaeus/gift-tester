@@ -19,3 +19,11 @@ Select the correct Latin-alphabet transliteration of the following Greek charact
 ~~~
 
 It would be great if that internal HTML would render as the quiz question is displayed. Can you help with that?
+
+---
+
+Conversation at: <https://x.com/i/grok/share/14f5bb628e6042a5afe4bc99508b74b3>
+
+That worked perfectly! And the code is really clear, if I need to tweak it for other cases in the future.
+
+Thank you!!!
