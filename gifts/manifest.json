@@ -1,9 +1,7 @@
 {
-  "files": [
-    "Odyssey01.gift",
-    "Odyssey02.gift",
-    "vocab_drill_ch1.1.gift",
-    "vocab_drill_ch1.2.gift"
-    "vocab_drill_ch1.3.gift",
-  ]
+	"files": [
+		"HQ_alphabet_U00.gift",
+		"HQ_morp_U01.gift",
+		"HQ_vocab_U01.gift",
+	]
 }
