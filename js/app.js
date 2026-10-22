@@ -16,8 +16,11 @@
     fileInput: document.getElementById("file-input"),
     pageSize: document.getElementById("page-size"),
     prev: document.getElementById("btn-prev"),
+    prev2: document.getElementById("btn-prev2"),
     next: document.getElementById("btn-next"),
+    next2: document.getElementById("btn-next2"),
     pageLabel: document.getElementById("page-label"),
+    pageLabel2: document.getElementById("page-label2"),
     jumpTo: document.getElementById("jump-to"),
     jump: document.getElementById("btn-jump"),
     showAnswers: document.getElementById("show-answers"),
@@ -110,8 +113,13 @@
     els.pageLabel.textContent = state.questions.length
       ? `Page ${state.page + 1} / ${pages}`
       : "No quiz loaded";
+    els.pageLabel2.textContent = state.questions.length
+      ? `Page ${state.page + 1} / ${pages}`
+      : "No quiz loaded";
     els.prev.disabled = state.page <= 0;
+    els.prev2.disabled = state.page <= 0;
     els.next.disabled = state.page >= pages - 1;
+    els.next2.disabled = state.page >= pages - 1;
     els.reload.disabled = !state.source;
     els.exp.disabled = !state.questions.length;
     els.jump.disabled = !state.questions.length;
@@ -418,7 +426,9 @@
     render();
   });
   els.prev.addEventListener("click", () => { state.page -= 1; render(); window.scrollTo(0, 0); });
+  els.prev2.addEventListener("click", () => { state.page -= 1; render(); window.scrollTo(0, 0); });
   els.next.addEventListener("click", () => { state.page += 1; render(); window.scrollTo(0, 0); });
+  els.next2.addEventListener("click", () => { state.page += 1; render(); window.scrollTo(0, 0); });
   els.jump.addEventListener("click", () => jumpTo(els.jumpTo.value));
   els.jumpTo.addEventListener("keydown", (ev) => {
     if (ev.key === "Enter") {
